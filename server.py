@@ -9,9 +9,6 @@ def index():
     return render_template('index.html')
 
 def print_comma_list(x):
-    """ convert a list into a comma-separated string, with the last 
-        two items separated with 'and'.
-    """
     if not x:
         s = ""
     elif len(x) == 1:
@@ -24,6 +21,8 @@ def print_comma_list(x):
 @app.route('/emotionDetector')
 def emotion_analyzer():
     result = emotion_detector(request.args.get("textToAnalyze"))
+    if result['dominant_emotion'] is None:
+        return 'Invalid text! Please try again!'
     list = [f"{k}: {v}" for k, v in result.items() if k != 'dominant_emotion']
     output = print_comma_list(list)
     text = f'For the given statement, the system response is {output}.'
